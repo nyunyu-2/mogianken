@@ -1,0 +1,51 @@
+body {
+    background-color: #F0EFF2;
+}
+
+.header {
+    background-color: black;
+}
+
+.header__inner {
+    margin:0 auto;
+    padding: 22px 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header__nav {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding-right: 25px;
+}
+
+.header__nav a {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.header__nav button {
+    font-size: 24px;
+    border: none;
+    color: white;
+    font-weight: 700;
+    background-color: black;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .header__nav a {
+        font-size: 16px;
+    }
+
+    .header__nav button {
+        font-size: 16px;
+    }
+}
+
+
+

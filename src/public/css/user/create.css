@@ -1,0 +1,123 @@
+
+.attendance__inner {
+    max-width: 1540px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 200px;
+    margin-bottom: 250px;
+}
+
+.attendance__status-label a {
+    background-color: #C8C8C8;
+    color: #696969;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 50px;
+    padding: 5px 20px;
+}
+
+.attendance__status-label {
+    margin-bottom: 30px;
+}
+
+.attendance__date {
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.attendance__time {
+    font-size: 80px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.attendance__button-clockIn {
+    background-color: black;
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    padding: 10px 70px;
+    border-radius: 20px;
+    border: none;
+    margin-top: 70px;
+    cursor: pointer;
+}
+
+.attendance__buttons-inner {
+    display: flex;
+    justify-content: center;
+    gap: 70px;
+}
+
+.attendance__button-clockOut {
+    background-color: black;
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    padding: 10px 70px;
+    border-radius: 20px;
+    border: none;
+    margin-top: 70px;
+    cursor: pointer;
+}
+
+.attendance__button-breakIn {
+    background-color: white;
+    color: black;
+    font-size: 32px;
+    font-weight: 700;
+    padding: 10px 55px;
+    border-radius: 20px;
+    border: none;
+    margin-top: 70px;
+    cursor: pointer;
+}
+
+.attendance__button-breakOut {
+    background-color: white;
+    color: black;
+    font-size: 32px;
+    font-weight: 700;
+    padding: 10px 55px;
+    border-radius: 20px;
+    border: none;
+    margin-top: 70px;
+    cursor: pointer;
+}
+
+.attendance__message {
+    font-size: 26px;
+    font-weight: 700;
+    color: black;
+    margin-top: 70px;
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .attendance__status-label a {
+        font-size: 16px;
+    }
+
+    .attendance__date {
+        font-size: 36px;
+    }
+
+    .attendance__time {
+        font-size: 70px;
+    }
+
+    .attendance__button-clockIn {
+        font-size: 26px;
+    }
+
+    .attendance__button-clockOut {
+        font-size: 26px;
+    }
+
+    .attendance__button-breakIn {
+        font-size: 26px;
+    }
+
+    .attendance__button-breakOut {
+        font-size: 26px;
+    }
+}

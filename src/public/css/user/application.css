@@ -1,0 +1,99 @@
+.application {
+    max-width: 1540px;
+    width: 60%;
+    margin: 80px auto;
+}
+
+.application__title {
+    border-left: 7px solid black;
+    font-size: 30px;
+    padding-left: 20px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.application__tabs {
+    width: 100%;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #000000;
+}
+input[type="radio"] {
+    display: none;
+}
+
+label {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    border-bottom: 2px solid transparent;
+    color: #333;
+}
+
+.application__tab-content {
+    display: none;
+}
+
+input#tab-pending:checked~.application__content #content-pending,
+input#tab-approved:checked~.application__content #content-approved {
+    display: block;
+}
+
+#tab-pending:checked~.application__tabs label[for="tab-pending"],
+#tab-approved:checked~.application__tabs label[for="tab-approved"] {
+    font-weight: 700;
+}
+
+.application__table {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.application__table thead th {
+    font-size: 16px;
+    font-weight: 700;
+    color: #737373;
+    padding: 10px 20px;
+}
+
+.application__table tbody td {
+    font-size: 16px;
+    font-weight: 700;
+    color: #737373;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.application__table td a {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.application__table thead tr {
+    border-bottom: 3px solid #E1E1E1;
+}
+.application__table tbody tr {
+    border-top: 2px solid #E1E1E1;
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .application {
+        width: 80%;
+    }
+
+    .application__title {
+        font-size: 20px;
+    }
+
+    .application__table thead th {
+        font-size: 13px;
+    }
+
+    .application__table tbody td {
+        font-size: 13px;
+    }
+}

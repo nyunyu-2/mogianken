@@ -1,0 +1,120 @@
+.attendance-detail {
+    display: block;
+    max-width: 1540px ;
+    width: 60% ;
+    margin: 80px auto;
+}
+
+.attendance-detail__title {
+    border-left: 7px solid black;
+    font-size: 30px;
+    padding-left: 20px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.attendance-detail table {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.attendance-detail__row:not(:first-child) {
+    border-top: 2px solid #E1E1E1;
+}
+
+.attendance-detail__header {
+    padding: 25px;
+    color: #737373;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 60px;
+}
+
+.attendance-detail__content {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.attendance-detail__content-name {
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 30px;
+}
+
+.attendance-detail__content-date {
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 30px;
+}
+
+.attendance-detail__content-date span {
+    padding-left: 145px;
+}
+
+.attendance-detail__content input {
+    border-radius: 4px;
+    border: 1px solid #E1E1E1;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 30px;
+    cursor: pointer;
+}
+
+.attendance-detail__content input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.line {
+    padding: 0 40px;
+}
+
+.attendance-detail__content-text textarea {
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    width: 316px;
+    height: 72px;
+    padding: 10px;
+}
+
+.attendance-detail__content-text {
+    padding: 15px 0 ;
+}
+
+.attendance-detail__button {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.attendance-detail__notice {
+    color: #FF000080;
+    padding: 30px 0;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.attendance-detail__button button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: bold;
+    width: 130px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.attendance-detail__text-display {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 30px;
+}
+
+.attendance-detail__textarea-display {
+    font-size: 16px;
+    font-weight: bold;
+}
