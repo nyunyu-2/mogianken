@@ -59,6 +59,9 @@ Route::post('/admin/login', [AuthController::class, 'adminAuthenticate'])
 
 Route::get('/admin/attendances', [AdminAttendanceController::class, 'index'])
     ->name('admin.attendances.index');
+Route::get('/admin/attendances/{id}', [AdminAttendanceController::class, 'show'])
+    ->name('admin.attendance.show');
+
 
 Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
     ->name('admin.staff.index');
@@ -73,3 +76,8 @@ Route::get('/admin/requests/{id}', [AdminApprovalController::class, 'edit'])
     ->name('admin.requests.edit');
 Route::post('/admin/approval/approve', [AdminApprovalController::class, 'approve'])
     ->name('admin.approval.approve');
+
+Route::put('/admin/attendances/staff/{id}', [AdminAttendanceController::class, 'update'])
+    ->name('admin.staff.attendance.update');
+
+

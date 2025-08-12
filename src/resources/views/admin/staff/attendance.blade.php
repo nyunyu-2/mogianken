@@ -29,17 +29,70 @@
             </tr>
         </thead>
         <tbody class="staff-attendance__table-body">
-            @foreach ($attendances as $attendance)
-                <tr>
-                    <td>{{ \Carbon\Carbon::parse($attendance->date)->format('Y/m/d') }}</td>
-                    <td>{{ $attendance->formatted_clock_in_time }}</td>
-                    <td>{{ $attendance->formatted_clock_out_time }}</td>
-                    <td>{{ $attendance->break_duration ?? '-' }}</td>
-                    <td>{{ $attendance->working_hours ?? '-' }}</td>
-                    <td><a href="">詳細</a></td>
-                </tr>
-            @endforeach
+        @forelse ($attendances as $attendance)
+            @php
+                $approved = $attendance->applications->where('status', '承認済み')->sortByDesc('updated_at')->first();
+
+                $pending = $attendance->applications->where('status', '承認待ち')->sortByDesc('updated_at')->first();
+
+                $application = $pending ?? $approved;
+
+                $clockIn = $application && $application->clock_in_time
+                    ? \Carbon\Carbon::parse($application->clock_in_time)->format('H:i')
+                    : ($attendance->clock_in_time
+                        ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i')
+                        : '-');
+
+                $clockOut = $application && $application->clock_out_time
+                    ? \Carbon\Carbon::parse($application->clock_out_time)->format('H:i')
+                    : ($attendance->clock_out_time
+                        ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i')
+                        : '-');
+
+                $breaks = $application ? $application->application_break_times : $attendance->breaks;
+
+                $totalBreakMinutes = $breaks->sum(function ($break) {
+                    $start = \Carbon\Carbon::parse($break->break_in_time ?? $break->start_time);
+                    $end = \Carbon\Carbon::parse($break->break_out_time ?? $break->end_time);
+                    return $end->diffInMinutes($start);
+                });
+
+                $breakDuration = $totalBreakMinutes > 0
+                    ? floor($totalBreakMinutes / 60) . ':' . str_pad($totalBreakMinutes % 60, 2, '0', STR_PAD_LEFT)
+                    : '-';
+
+                if ($application && $application->clock_in_time && $application->clock_out_time) {
+                    $start = \Carbon\Carbon::parse($application->clock_in_time);
+                    $end = \Carbon\Carbon::parse($application->clock_out_time);
+                    $workDurationMinutes = $end->diffInMinutes($start) - $totalBreakMinutes;
+                } elseif ($attendance->clock_in_time && $attendance->clock_out_time) {
+                    $start = \Carbon\Carbon::parse($attendance->clock_in_time);
+                    $end = \Carbon\Carbon::parse($attendance->clock_out_time);
+                    $workDurationMinutes = $end->diffInMinutes($start) - $totalBreakMinutes;
+                } else {
+                    $workDurationMinutes = null;
+                }
+
+                $workingHours = $workDurationMinutes !== null
+                    ? floor($workDurationMinutes / 60) . ':' . str_pad($workDurationMinutes % 60, 2, '0', STR_PAD_LEFT)
+                    : '-';
+            @endphp
+
+            <tr>
+                <td>{{ \Carbon\Carbon::parse($attendance->date)->format('Y/m/d') }}</td>
+                <td>{{ $clockIn }}</td>
+                <td>{{ $clockOut }}</td>
+                <td>{{ $breakDuration }}</td>
+                <td>{{ $workingHours }}</td>
+                <td><a href="{{ route('admin.attendance.show', ['id' => $attendance->id]) }}">詳細</a></td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="6">該当する勤怠データがありません。</td>
+            </tr>
+        @endforelse
         </tbody>
+
     </table>
 </div>
 @endsection

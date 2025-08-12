@@ -28,30 +28,40 @@
                 <tr class="attendance-detail__row">
                     <th class="attendance-detail__header">出勤・退勤</th>
                     <td class="attendance-detail__content">
-                        @if(!isset($application) || !$application->is_pending)
-                            <input type="time" name="clock_in_time" value="{{ old('clock_in_time', $attendance->formatted_clock_in_time !== '-' ? $attendance->formatted_clock_in_time : '') }}" step="60">
-                            <span class="line">～</span>
-                            <input type="time" name="clock_out_time" value="{{ old('clock_out_time', $attendance->formatted_clock_out_time !== '-' ? $attendance->formatted_clock_out_time : '') }}" step="60">
-                        @else
+                        @if(isset($application) && $application->is_pending)
+                            {{-- 申請中（未承認）なら表示のみ --}}
                             <span class="attendance-detail__text-display">
                                 {{ $attendance->formatted_clock_in_time }}
                             </span>
-                                <span class="line"> ～ </span>
+                            <span class="line"> ～ </span>
                             <span class="attendance-detail__text-display">
                                 {{ $attendance->formatted_clock_out_time }}
                             </span>
+                        @else
+                            {{-- 承認済み or 申請なし なら編集可能 --}}
+                            <input type="time" name="clock_in_time" value="{{ old('clock_in_time', $attendance->formatted_clock_in_time !== '-' ? $attendance->formatted_clock_in_time : '') }}" step="60">
+                            <span class="line">～</span>
+                            <input type="time" name="clock_out_time" value="{{ old('clock_out_time', $attendance->formatted_clock_out_time !== '-' ? $attendance->formatted_clock_out_time : '') }}" step="60">
+
+                            @error('clock_in_time') <div class="error">{{ $message }}</div> @enderror
+                            @error('clock_out_time') <div class="error">{{ $message }}</div> @enderror
                         @endif
-                        @error('clock_in_time') <div class="error">{{ $message }}</div> @enderror
-                        @error('clock_out_time') <div class="error">{{ $message }}</div> @enderror
                     </td>
                 </tr>
 
                 {{-- 休憩 --}}
                 @php
-                    $isEditing = !isset($application) || !$application->is_pending;
-                    $allBreaks = ($isEditing) ? $attendance->breaks : $applicationBreaks ?? collect();
+                    $isPending = isset($application) && $application->status === '承認待ち';
+                    $isEditing = !$isPending;
 
-                    $existingCount = $attendance->breaks->count();
+                    $allBreaks = $isPending
+                        ? ($applicationBreaks ?? collect())
+                        : ($application && $application->status === '承認済み'
+                            ? $application->application_break_times
+                            : ($attendance->breaks ?? collect())
+                        );
+
+                    $existingCount = $allBreaks->count();
                 @endphp
 
                 @foreach ($allBreaks as $i => $break)
@@ -83,17 +93,8 @@
                 @if ($isEditing)
                     @php
                         $breaksOld = old('breaks', []);
-                        $hasAdditionalInput = false;
-                        foreach ($breaksOld as $index => $break) {
-                            if ($index >= $existingCount && (!empty($break['start']) || !empty($break['end']))) {
-                                $hasAdditionalInput = true;
-                                $nextIndex = $index;
-                                break;
-                            }
-                        }
-                        if (!$hasAdditionalInput) {
-                            $nextIndex = $existingCount;
-                        }
+                        $maxOldIndex = count($breaksOld) > 0 ? max(array_keys($breaksOld)) : -1;
+                        $nextIndex = max($existingCount, $maxOldIndex + 1);
                     @endphp
 
                     <tr class="attendance-detail__row">

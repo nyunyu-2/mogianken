@@ -71,6 +71,22 @@ class Attendance extends Model
         return sprintf('%02d:%02d', $hours, $minutes);
     }
 
+    public function getFormattedBreaksAttribute()
+    {
+        // applicationBreaks（承認待ち）が存在すればそれを優先
+        $breaks = $this->relationLoaded('applications') && $this->applications->firstWhere('status', '承認待ち')
+            ? $this->applications->firstWhere('status', '承認待ち')->breakTimes
+            : $this->breaks;
+
+        if (!$breaks || $breaks->isEmpty()) {
+            return '-';
+        }
+
+        return $breaks->map(function ($break) {
+            return $break->start_time . '〜' . $break->end_time;
+        })->implode('<br>');
+    }
+
 
     public function getFormattedClockInTimeAttribute()
     {
@@ -79,7 +95,9 @@ class Attendance extends Model
 
     public function getFormattedClockOutTimeAttribute()
     {
-        return $this->clock_out_time ? \Carbon\Carbon::parse($this->clock_out_time)->format('H:i') : '-';
+        return $this->clock_out_time
+            ? \Carbon\Carbon::parse($this->clock_out_time)->format('H:i')
+            : '-';
     }
 
     public function user()
@@ -97,7 +115,6 @@ class Attendance extends Model
         return $this->applications()->where('status', '承認待ち')->exists();
     }
 
-    // Attendance.php
     public function applicationBreakTimes()
     {
         return $this->hasManyThrough(
@@ -108,6 +125,22 @@ class Attendance extends Model
             'id',                // Attendanceの主キー
             'id'                 // Applicationの主キー
         );
+    }
+
+    public function getEffectiveClockInTimeAttribute()
+    {
+        $application = $this->applications()->where('is_pending', true)->latest()->first();
+        return $application && $application->clock_in_time
+            ? $application->clock_in_time
+            : $this->clock_in_time;
+    }
+
+    public function getEffectiveClockOutTimeAttribute()
+    {
+        $application = $this->applications()->where('is_pending', true)->latest()->first();
+        return $application && $application->clock_out_time
+            ? $application->clock_out_time
+            : $this->clock_out_time;
     }
 
 }

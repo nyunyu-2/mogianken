@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use App\Models\Application;
 
 class AdminStaffController extends Controller
 {
@@ -24,7 +25,8 @@ class AdminStaffController extends Controller
 
         $user = User::findOrFail($id);
 
-        $attendances = Attendance::where('user_id', $id)
+        $attendances = Attendance::with(['user', 'applications.application_break_times'])
+            ->where('user_id', $id)
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
             ->orderBy('date')
             ->get();

@@ -42,10 +42,15 @@ class UserApplicationController extends Controller
             $application = new Application();
             $application->attendance_id = $attendance->id;
             $application->user_id = auth()->id();
+        } else {
+            $application->breakTimes()->delete();
         }
 
         $application->status = '承認待ち';
         $application->reason = $request->input('reason', '');
+
+        $application->clock_in_time = $request->input('clock_in_time');
+        $application->clock_out_time = $request->input('clock_out_time');
         $application->save();
 
         $breaks = $request->input('breaks', []);
@@ -58,8 +63,45 @@ class UserApplicationController extends Controller
             }
         }
 
-        return redirect()->route('user.attendance.show', ['attendance' => $attendance->id])
+        return redirect()->route('user.attendance.show', ['id' => $attendance->id])
             ->with('success', '申請を承認待ちリストに登録しました。');
 
+    }
+
+    public function approve(Request $request)
+    {
+        $application = Application::with('application_break_times')->findOrFail($request->input('application_id'));
+
+        // 申請を承認済みに
+        $application->status = '承認済み';
+        $application->save();
+
+        // 勤務実績を更新
+        $attendance = $application->attendance;
+        $attendance->clock_in_time = $application->clock_in_time;
+        $attendance->clock_out_time = $application->clock_out_time;
+
+        // 申請に紐づく休憩時間の合計を計算
+        $totalBreakMinutes = $application->application_break_times->sum(function ($break) {
+            $start = \Carbon\Carbon::parse($break->break_in_time);
+            $end = \Carbon\Carbon::parse($break->break_out_time);
+            return $end->diffInMinutes($start);
+        });
+
+        $attendance->break_duration = $totalBreakMinutes;
+
+        // 勤務時間計算
+        $workDurationMinutes = null;
+        if ($attendance->clock_in_time && $attendance->clock_out_time) {
+            $start = \Carbon\Carbon::parse($attendance->clock_in_time);
+            $end = \Carbon\Carbon::parse($attendance->clock_out_time);
+            $workDurationMinutes = $end->diffInMinutes($start) - $totalBreakMinutes;
+        }
+        $attendance->working_hours = $workDurationMinutes;
+
+        $attendance->save();
+
+        return redirect()->route('admin.applications.index')
+                        ->with('success', '申請を承認し、勤務情報を更新しました。');
     }
 }

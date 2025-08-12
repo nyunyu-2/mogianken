@@ -70,10 +70,10 @@
                 <form action="{{ route('admin.approval.approve') }}" method="POST">
                     @csrf
                     <input type="hidden" name="application_id" value="{{ $application->id }}">
-                    <button type="submit" class="btn btn-primary">承認</button>
+                    <button type="submit" class="admin-edit__button-common">承認</button>
                 </form>
             @else
-                <span class="btn btn-secondary disabled">承認済み</span>
+                <span class="admin-edit__button-common admin-edit__button-approve">承認済み</span>
             @endif
         </div>
     </form>

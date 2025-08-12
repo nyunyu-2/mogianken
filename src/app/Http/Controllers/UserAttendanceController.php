@@ -151,7 +151,6 @@ class UserAttendanceController extends Controller
         return redirect()->route('user.attendance.create')->with('status', '休憩から戻りました。');
     }
 
-
     // 勤務一覧
     public function index(Request $request)
     {
@@ -161,11 +160,55 @@ class UserAttendanceController extends Controller
         $startOfMonth = $date->copy()->startOfMonth();
         $endOfMonth = $date->copy()->endOfMonth();
 
-        $attendances = Attendance::with('breaks')
+        $attendances = Attendance::with(['breaks', 'applications.application_break_times'])
             ->where('user_id', Auth::id())
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
             ->orderBy('date', 'asc')
-            ->get();
+            ->get()
+            ->map(function ($attendance) {
+                // 最新の承認済み申請を取得
+                $approvedApplication = $attendance->applications
+                    ->where('status', '承認済み')
+                    ->sortByDesc('updated_at')
+                    ->first();
+
+                if ($approvedApplication) {
+                    $breaks = $approvedApplication->application_break_times;
+                    $clockIn = $approvedApplication->clock_in_time;
+                    $clockOut = $approvedApplication->clock_out_time;
+                } else {
+                    $breaks = $attendance->breaks;
+                    $clockIn = $attendance->clock_in_time;
+                    $clockOut = $attendance->clock_out_time;
+                }
+
+                // 合計休憩時間（分）
+                $totalBreakMinutes = $breaks->sum(function ($break) {
+                    $start = \Carbon\Carbon::parse($break->break_in_time ?? $break->start_time);
+                    $end = \Carbon\Carbon::parse($break->break_out_time ?? $break->end_time);
+                    return $end->diffInMinutes($start);
+                });
+
+                // 勤務時間（分）
+                if ($clockIn && $clockOut) {
+                    $start = \Carbon\Carbon::parse($clockIn);
+                    $end = \Carbon\Carbon::parse($clockOut);
+                    $workDurationMinutes = $end->diffInMinutes($start) - $totalBreakMinutes;
+                } else {
+                    $workDurationMinutes = null;
+                }
+
+                $attendance->formatted_break_duration = $totalBreakMinutes > 0
+                    ? floor($totalBreakMinutes / 60) . '時間' . ($totalBreakMinutes % 60) . '分'
+                    : '-';
+
+                $attendance->working_hours = $workDurationMinutes !== null
+                    ? floor($workDurationMinutes / 60) . '時間' . ($workDurationMinutes % 60) . '分'
+                    : '-';
+
+                return $attendance;
+            });
+
 
 
         return view('user.attendance.index', [
@@ -181,13 +224,33 @@ class UserAttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
 
-        $application = $attendance->applications()
-            ->where('status', '承認待ち')
+        $approvedApplication = $attendance->applications()
+            ->where('status', '承認済み')
+            ->with('application_break_times')
+            ->latest('updated_at')
             ->first();
 
-        $applicationBreaks = $application ? $application->breakTimes : collect();
+        $pendingApplication = $attendance->applications()
+            ->where('status', '承認待ち')
+            ->with('application_break_times')
+            ->latest('updated_at')
+            ->first();
 
+        $application = $pendingApplication ?? $approvedApplication;
 
-        return view('user.attendance.show', compact('attendance','application', 'applicationBreaks'));
+        $applicationBreaks = $application ? $application->application_break_times : collect();
+
+        $totalBreakMinutes = $applicationBreaks->sum(function ($break) {
+            $start = \Carbon\Carbon::parse($break->break_in_time);
+            $end = \Carbon\Carbon::parse($break->break_out_time);
+            return $end->diffInMinutes($start);
+        });
+
+        return view('user.attendance.show', compact(
+            'attendance',
+            'application',
+            'applicationBreaks',
+            'totalBreakMinutes',
+        ));
     }
 }
