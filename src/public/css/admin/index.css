@@ -62,3 +62,22 @@
 .admin-attendances__table-body tr {
     border-top: 2px solid #E1E1E1;
 }
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .admin-attendances {
+        width: 80%;
+    }
+
+    .admin-attendances__title {
+        font-size: 22px;
+    }
+
+    .admin-attendances__arrow {
+        font-size: 13px;
+    }
+
+    .admin-attendance__table th,
+    .admin-attendance__table td {
+        font-size: 13px;
+    }
+}

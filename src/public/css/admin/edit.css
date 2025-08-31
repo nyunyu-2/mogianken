@@ -69,3 +69,23 @@
 .admin-edit__button-approve {
     background-color: #696969;
 }
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .admin-edit {
+        width: 80%;
+    }
+
+    .admin-edit__title {
+        font-size: 22px;
+    }
+
+    .admin-edit__header {
+        font-size: 13px;
+    }
+
+    .admin-edit__button-common {
+        font-size: 16px;
+        width: 110px;
+        height: 40px;
+    }
+}

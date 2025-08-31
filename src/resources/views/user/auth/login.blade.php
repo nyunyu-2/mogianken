@@ -36,7 +36,7 @@
                         </div>
                         <div class="login-form__error">
                             @error('email')
-                                <p>{{ $message }}</p>
+                                <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="login-form__error">
                             @error('password')
-                                <p>{{ $message }}</p>
+                                <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>

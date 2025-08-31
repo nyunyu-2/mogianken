@@ -33,14 +33,18 @@ label {
     color: #333;
 }
 
-input#tab-pending:checked+label[for="tab-pending"],
-input#tab-approved:checked+label[for="tab-approved"] {
-    font-weight: 700;
+.admin-application__tab-content {
+    display: none;
 }
 
-#tab-pending:checked~#content-pending,
-#tab-approved:checked~#content-approved {
+input#tab-pending:checked~.admin-application__content #content-pending,
+input#tab-approved:checked~.admin-application__content #content-approved {
     display: block;
+}
+
+#tab-pending:checked~.admin-application__tabs label[for="tab-pending"],
+#tab-approved:checked~.admin-application__tabs label[for="tab-approved"] {
+    font-weight: 700;
 }
 
 
@@ -54,14 +58,14 @@ input#tab-approved:checked+label[for="tab-approved"] {
     font-size: 16px;
     font-weight: 700;
     color: #737373;
-    padding: 10px 20px;
+    padding: 10px 5px;
 }
 
 .admin-application__table tbody td {
     font-size: 16px;
     font-weight: 700;
     color: #737373;
-    padding: 10px 20px;
+    padding: 10px 5px;
     text-align: center;
 }
 
@@ -77,4 +81,22 @@ input#tab-approved:checked+label[for="tab-approved"] {
 
 .admin-application__table tbody tr {
     border-top: 2px solid #E1E1E1;
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .admin-application {
+        width: 80%;
+    }
+
+    .admin-application__title {
+        font-size: 22px;
+    }
+
+    .admin-application__table thead th {
+        font-size: 13px;
+    }
+
+    .admin-application__table tbody td {
+        font-size: 13px;
+    }
 }

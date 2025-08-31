@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\Attendance;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AttendanceRequest;
 
 class UserApplicationController extends Controller
 {
@@ -24,7 +25,7 @@ class UserApplicationController extends Controller
         return view('user.application.index', compact('pendingApplications', 'approvedApplications'));
     }
 
-    public function resubmit(Request $request)
+    public function resubmit(AttendanceRequest $request)
     {
         $attendanceId = $request->input('attendance_id');
         $attendance = Attendance::findOrFail($attendanceId);
@@ -46,9 +47,10 @@ class UserApplicationController extends Controller
             $application->breakTimes()->delete();
         }
 
+        $validated = $request->validated();
+
         $application->status = '承認待ち';
         $application->reason = $request->input('reason', '');
-
         $application->clock_in_time = $request->input('clock_in_time');
         $application->clock_out_time = $request->input('clock_out_time');
         $application->save();

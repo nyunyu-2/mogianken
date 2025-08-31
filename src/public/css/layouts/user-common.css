@@ -2,6 +2,10 @@ body {
     background-color: #F0EFF2;
 }
 
+.header__logo img {
+    height: 36px;
+}
+
 .header {
     background-color: black;
 }
@@ -38,6 +42,10 @@ body {
 }
 
 @media screen and (min-width: 768px) and (max-width: 850px) {
+    .header__logo img {
+        height: 30px;
+    }
+
     .header__nav a {
         font-size: 16px;
     }

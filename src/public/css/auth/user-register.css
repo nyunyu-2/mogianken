@@ -74,3 +74,29 @@
 .register-form__error {
     color: red;
 }
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .register-form__form {
+        width: 70%;
+    }
+
+    .register-form__title {
+        font-size: 30px;
+    }
+
+    .register-form__label {
+        font-size: 18px;
+    }
+
+    .register-form__field--text input {
+        font-size: 16px;
+    }
+
+    .register-form__button-register {
+        font-size: 20px;
+    }
+
+    .register-form__button-login {
+        font-size: 14px;
+    }
+}

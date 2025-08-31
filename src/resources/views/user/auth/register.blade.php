@@ -35,7 +35,9 @@
                             <input type="text" name="name" value="{{ old('name') }}" />
                         </div>
                         <div class="register-form__error">
-                            
+                            @error('name')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -48,7 +50,9 @@
                             <input type="text" name="email" value="{{ old('email') }}" />
                         </div>
                         <div class="register-form__error">
-                            
+                            @error('email')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -61,7 +65,9 @@
                             <input type="password" name="password" />
                         </div>
                         <div class="register-form__error">
-                           
+                            @error('password')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>

@@ -41,3 +41,19 @@
     text-decoration: none;
     font-weight: bold;
 }
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .staff-list {
+        width: 80%;
+    }
+
+    .staff-list__title {
+        font-size: 22px;
+    }
+
+    .staff-list__table th,
+    .staff-list__table td {
+        font-size: 13px;
+        padding: 12px 2px;
+    }
+}

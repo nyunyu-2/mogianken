@@ -71,6 +71,32 @@
     padding: 25px;
 }
 
-.login-form__error {
+.error {
     color: red;
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .login-form__form {
+        width: 70%;
+    }
+
+    .login-form__title {
+        font-size: 30px;
+    }
+
+    .login-form__label {
+        font-size: 18px;
+    }
+
+    .login-form__field--text input {
+        font-size: 16px;
+    }
+
+    .login-form__button-login {
+        font-size: 20px;
+    }
+
+    .login-form__button-register {
+        font-size: 14px;
+    }
 }

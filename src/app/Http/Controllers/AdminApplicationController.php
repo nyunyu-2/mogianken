@@ -7,12 +7,12 @@ use App\Models\Application;
 
 class AdminApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $applications = Application::with(['user', 'attendance'])
-            ->latest()
-            ->get();
+        $pendingApplications = Application::where('status', '承認待ち')->get();
 
-        return view('admin.application.index', compact('applications'));
+        $approvedApplications = Application::where('status', '承認済み')->get();
+
+        return view('admin.application.index', compact('pendingApplications','approvedApplications'));
     }
 }

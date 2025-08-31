@@ -23,10 +23,17 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
-})->name('logout');
+// 一般ログイン
+Route::get('/login', [AuthController::class, 'login'])->name('login'); // ←ここ
+Route::post('/login', [AuthController::class, 'userAuthenticate'])->name('login.post');
+
+// 管理者ログイン
+Route::get('/admin/login', [AuthController::class, 'AdminLogin'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'adminAuthenticate'])->name('admin.authenticate');
+
+
+Route::post('/logout', [AuthController::class, 'userLogout'])->name('logout');
+Route::post('/admin/logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/attendance', [UserAttendanceController::class, 'create'])->name('user.attendance.create');
@@ -52,32 +59,30 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/admin/login', [AuthController::class, 'AdminLogin']);
-Route::post('/admin/login', [AuthController::class, 'adminAuthenticate'])
-    ->name('admin.authenticate');
-
-Route::get('/admin/attendances', [AdminAttendanceController::class, 'index'])
-    ->name('admin.attendances.index');
-Route::get('/admin/attendances/{id}', [AdminAttendanceController::class, 'show'])
-    ->name('admin.attendance.show');
+    Route::get('/admin/attendances', [AdminAttendanceController::class, 'index'])
+        ->name('admin.attendances.index');
+    Route::get('/admin/attendances/{id}', [AdminAttendanceController::class, 'show'])
+        ->name('admin.attendance.show');
 
 
-Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
-    ->name('admin.staff.index');
-Route::get('/admin/attendances/staff/{id}',[AdminStaffController::class, 'show'])
-    ->name('admin.staff.attendance.show');
+    Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
+        ->name('admin.staff.index');
+    Route::get('/admin/attendances/staff/{id}',[AdminStaffController::class, 'show'])
+        ->name('admin.staff.attendance.show');
 
-Route::get('/admin/requests', [AdminApplicationController::class, 'index'])
-    ->name('admin.application.index');
+    Route::get('/admin/requests', [AdminApplicationController::class, 'index'])
+        ->name('admin.application.index');
 
 
-Route::get('/admin/requests/{id}', [AdminApprovalController::class, 'edit'])
-    ->name('admin.requests.edit');
-Route::post('/admin/approval/approve', [AdminApprovalController::class, 'approve'])
-    ->name('admin.approval.approve');
+    Route::get('/admin/requests/{id}', [AdminApprovalController::class, 'edit'])
+        ->name('admin.requests.edit');
+    Route::post('/admin/approval/approve', [AdminApprovalController::class, 'approve'])
+        ->name('admin.approval.approve');
 
-Route::put('/admin/attendances/staff/{id}', [AdminAttendanceController::class, 'update'])
-    ->name('admin.staff.attendance.update');
+    Route::put('/admin/attendances/{id}', [AdminAttendanceController::class, 'update'])
+        ->name('admin.attendance.update');
+});
 
 

@@ -17,6 +17,19 @@
 6. .env ファイルを必要に応じて修正
 7. php artisan migrate
 8. php artisan key:generate
-9. php artisan db:seed
-10. composer require laravel/fortify
+9. composer require laravel/fortify
 
+## ダミーデータ作成方法
+- php artisan db:seed
+- php artisan db:seed --class=ItemSeeder
+
+## ログイン情報（開発用）
+#### 管理者ユーザー
+- メールアドレス：admin@example.com
+- パスワード：password
+#### 一般ユーザー
+- メールアドレス：user@example.com
+- パスワード：password
+
+## テスト方法
+- php artisan test

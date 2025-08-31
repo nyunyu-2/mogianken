@@ -122,7 +122,7 @@ class UserAttendanceController extends Controller
         }
 
         $attendance->breaks()->create([
-            'break_in_time' => now()->format('Y-m-d H:i'),
+            'break_in_time' => now()->format('H:i:s'),
         ]);
 
         return redirect()->route('user.attendance.create')->with('status', '休憩に入りました。');
@@ -145,7 +145,7 @@ class UserAttendanceController extends Controller
         }
 
         $latestBreak->update([
-            'break_out_time' => now()->format('Y-m-d H:i'),
+            'break_out_time' => now()->format('H:i:s'),
         ]);
 
         return redirect()->route('user.attendance.create')->with('status', '休憩から戻りました。');

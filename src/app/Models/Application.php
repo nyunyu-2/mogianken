@@ -63,4 +63,18 @@ class Application extends Model
 
         return sprintf('%02d:%02d', $hours, $minutes);
     }
+
+    public function getFormattedClockInTimeAttribute()
+    {
+        return $this->clock_in_time
+            ? \Carbon\Carbon::parse($this->clock_in_time)->format('H:i')
+            : '-';
+    }
+
+    public function getFormattedClockOutTimeAttribute()
+    {
+        return $this->clock_out_time
+            ? \Carbon\Carbon::parse($this->clock_out_time)->format('H:i')
+            : '-';
+    }
 }

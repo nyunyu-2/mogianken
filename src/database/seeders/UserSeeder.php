@@ -13,22 +13,26 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        User::updateOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'テストユーザー',
-                'password' => Hash::make('password'),
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'admin@example.com'],
+        // 管理者ユーザー
+        User::firstOrCreate(
+            ['email' => config('admin.email')],
             [
                 'name' => 'Admin',
                 'password' => Hash::make('password123'),
             ]
         );
+
+        User::firstOrCreate(
+            ['email' => 'user@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password123'),
+            ]
+        );
+
+        // 一般ユーザー 5人
+        User::factory()->count(5)->create();
     }
 }

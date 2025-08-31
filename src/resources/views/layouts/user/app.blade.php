@@ -15,7 +15,7 @@
     <header class="header">
         <div class="header__inner">
             <a class="header__logo">
-                <img src="{{ asset('images/logo.svg') }}" alt="ロゴ" style="height: 36px;">
+                <img src="{{ asset('images/logo.svg') }}" alt="ロゴ">
             </a>
             <div class="header__nav">
                 <a href="{{ url('/attendance') }}" class="header__work-button">勤怠</a>

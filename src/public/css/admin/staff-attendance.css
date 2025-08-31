@@ -57,3 +57,22 @@
 .staff-attendance__table-body tr {
     border-top: 2px solid #E1E1E1;
 }
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .staff-attendance {
+        width: 80%;
+    }
+
+    .staff-attendance__title {
+        font-size: 22px;
+    }
+
+    .staff-attendance__arrow {
+        font-size: 13px;
+    }
+
+    .staff-attendance__table th,
+    .staff-attendance__table td {
+        font-size: 13px;
+    }
+}

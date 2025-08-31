@@ -35,6 +35,11 @@
                         <div class="login-form__field--text">
                             <input type="email" name="email" value="{{ old('email') }}" />
                         </div>
+                        <div class="login-form__error">
+                            @error('email')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
                 </div>
                 <div class="login-form__group">
@@ -44,6 +49,11 @@
                     <div class="login-form__field">
                         <div class="login-form__field--text">
                             <input type="password" name="password" />
+                        </div>
+                        <div class="login-form__error">
+                            @error('password')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>

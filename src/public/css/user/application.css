@@ -56,14 +56,14 @@ input#tab-approved:checked~.application__content #content-approved {
     font-size: 16px;
     font-weight: 700;
     color: #737373;
-    padding: 10px 20px;
+    padding: 10px 5px;
 }
 
 .application__table tbody td {
     font-size: 16px;
     font-weight: 700;
     color: #737373;
-    padding: 10px 20px;
+    padding: 10px 5px;
     text-align: center;
 }
 
@@ -86,7 +86,7 @@ input#tab-approved:checked~.application__content #content-approved {
     }
 
     .application__title {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .application__table thead th {

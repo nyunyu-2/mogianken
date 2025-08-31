@@ -31,11 +31,11 @@
                         @if(isset($application) && $application->is_pending)
                             {{-- 申請中（未承認）なら表示のみ --}}
                             <span class="attendance-detail__text-display">
-                                {{ $attendance->formatted_clock_in_time }}
+                                {{ $application->formatted_clock_in_time }}
                             </span>
                             <span class="line"> ～ </span>
                             <span class="attendance-detail__text-display">
-                                {{ $attendance->formatted_clock_out_time }}
+                                {{ $application->formatted_clock_out_time }}
                             </span>
                         @else
                             {{-- 承認済み or 申請なし なら編集可能 --}}
@@ -43,8 +43,11 @@
                             <span class="line">～</span>
                             <input type="time" name="clock_out_time" value="{{ old('clock_out_time', $attendance->formatted_clock_out_time !== '-' ? $attendance->formatted_clock_out_time : '') }}" step="60">
 
-                            @error('clock_in_time') <div class="error">{{ $message }}</div> @enderror
-                            @error('clock_out_time') <div class="error">{{ $message }}</div> @enderror
+                            @if($errors->has('clock_in_time') || $errors->has('clock_out_time'))
+                                <div class="error">
+                                    {{ $errors->first('clock_in_time') ?: $errors->first('clock_out_time') }}
+                                </div>
+                            @endif
                         @endif
                     </td>
                 </tr>
@@ -83,8 +86,12 @@
                                     {{ \Carbon\Carbon::parse($break->break_out_time)->format('H:i') }}
                                 </span>
                             @endif
-                            @error('breaks.' . $i . '.start') <div class="error">{{ $message }}</div> @enderror
-                            @error('breaks.' . $i . '.end') <div class="error">{{ $message }}</div> @enderror
+                            @error('breaks.' . $i . '.start')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            @error('breaks.' . $i . '.end')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
                         </td>
                     </tr>
                 @endforeach
@@ -103,8 +110,12 @@
                             <input type="time" name="breaks[{{ $nextIndex }}][start]" value="{{ old('breaks.' . $nextIndex . '.start') }}">
                             <span class="line">～</span>
                             <input type="time" name="breaks[{{ $nextIndex }}][end]" value="{{ old('breaks.' . $nextIndex . '.end') }}">
-                            @error('breaks.' . $nextIndex . '.start') <div class="error">{{ $message }}</div> @enderror
-                            @error('breaks.' . $nextIndex . '.end') <div class="error">{{ $message }}</div> @enderror
+                            @error('breaks.' . $nextIndex . '.start')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            @error('breaks.' . $nextIndex . '.end')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
                         </td>
                     </tr>
                 @endif
@@ -114,7 +125,10 @@
                     <th class="attendance-detail__header">備考</th>
                     <td class="attendance-detail__content-text">
                         @if(!isset($application) || !$application->is_pending)
-                            <textarea name="reason" id="reason" required>{{ old('reason', $application->reason ?? '') }}</textarea>
+                            <textarea name="reason" id="reason">{{ old('reason', $application->reason ?? '') }}</textarea>
+                            @error('reason')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
                         @else
                             <p class="attendance-detail__textarea-display">{{ $application->reason }}</p>
                         @endif

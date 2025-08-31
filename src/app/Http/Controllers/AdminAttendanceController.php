@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\Attendance;
 use App\Models\Application;
-
+use App\Http\Requests\AttendanceRequest;
 
 
 class AdminAttendanceController extends Controller
@@ -57,7 +57,7 @@ class AdminAttendanceController extends Controller
         return view('admin.attendance.show', compact('attendance', 'application', 'applicationBreaks'));
     }
 
-    public function update(Request $request, $id)
+    public function update(AttendanceRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
 

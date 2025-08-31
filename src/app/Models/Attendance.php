@@ -13,6 +13,12 @@ class Attendance extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'date' => 'date',
+        'clock_in_time' => 'datetime',
+        'clock_out_time' => 'datetime',
+    ];
+
     protected $fillable = [
         'user_id',
         'date',
@@ -120,10 +126,9 @@ class Attendance extends Model
         return $this->hasManyThrough(
             \App\Models\ApplicationBreakTime::class,
             \App\Models\Application::class,
-            'attendance_id',     // Application側の外部キー
-            'application_id',    // ApplicationBreakTime側の外部キー
-            'id',                // Attendanceの主キー
-            'id'                 // Applicationの主キー
+            'attendance_id',
+            'application_id',
+            'id',
         );
     }
 
