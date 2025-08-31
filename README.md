@@ -26,10 +26,10 @@
 ## ログイン情報（開発用）
 #### 管理者ユーザー
 - メールアドレス：admin@example.com
-- パスワード：password
+- パスワード：password123
 #### 一般ユーザー
 - メールアドレス：user@example.com
-- パスワード：password
+- パスワード：password123
 
 ## テスト方法
 - php artisan test
