@@ -33,3 +33,10 @@
 
 ## テスト方法
 - php artisan test
+
+## ER図
+![ER図](./src/public/images/ER.png)
+
+## URL
+- 開発環境:http://localhost/
+- phpMyAdmin:http://localhost:8080/
